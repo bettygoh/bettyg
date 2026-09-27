@@ -611,8 +611,8 @@ textarea.field { height: auto; min-height: 160px; padding: 14px 16px; resize: ve
 .product__price s { opacity: .5; margin-right: 8px; }
 
 .option { display: flex; flex-direction: column; gap: 12px; border: 0; margin: 0; padding: 0; min-width: 0; }
-.option__legend { padding: 0; }
-.option__values { display: flex; flex-wrap: wrap; gap: 10px; }
+.option__legend { padding: 0; margin-bottom: 20px; }
+.option__values { display: flex; flex-wrap: wrap; gap: 14px; padding-left: 4px; }
 
 .swatch {
   position: relative;

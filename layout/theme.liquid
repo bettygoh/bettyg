@@ -49,7 +49,7 @@
 
     <script>
       window.theme = {
-        moneyFormat: {{ shop.money_format | json }},
+        moneyFormat: {{ shop.money_with_currency_format | json }},
         routes: {
           root: {{ routes.root_url | json }},
           cartAdd: {{ routes.cart_add_url | json }},

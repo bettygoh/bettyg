@@ -50,7 +50,7 @@
     {%- if product != blank -%}
       {%- assign variant = product.selected_or_first_available_variant -%}
       <div class="featured-product__buy">
-        <span class="price">{{ variant.price | money }}</span>
+        <span class="price">{{ variant.price | money_with_currency }}</span>
         {%- form 'product', product, data-product-form: '', novalidate: 'novalidate' -%}
           <input type="hidden" name="id" value="{{ variant.id }}">
           <input type="hidden" name="quantity" value="1">
@@ -70,7 +70,7 @@
       <p class="form-message form-message--error" data-product-error role="alert" hidden></p>
     {%- else -%}
       <div class="featured-product__buy">
-        <span class="price">{{ 2880 | money }}</span>
+        <span class="price">{{ 2880 | money_with_currency }}</span>
         <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
           {{- section.settings.button_label | default: 'Add to bag' | escape -}}
         </a>

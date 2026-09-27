@@ -42,9 +42,9 @@
                     <a href="{{ item.url }}" class="line-item__title">{{ item.product.title | escape }}</a>
                     <span class="line-item__price">
                       {%- if item.original_line_price != item.final_line_price -%}
-                        <s>{{ item.original_line_price | money }}</s>
+                        <s>{{ item.original_line_price | money_with_currency }}</s>
                       {%- endif -%}
-                      {{ item.final_line_price | money }}
+                      {{ item.final_line_price | money_with_currency }}
                     </span>
                   </div>
 
@@ -53,7 +53,7 @@
                   {%- if item.line_level_discount_allocations.size > 0 -%}
                     <ul class="line-item__discounts">
                       {%- for allocation in item.line_level_discount_allocations -%}
-                        <li>{{ allocation.discount_application.title | escape }} (−{{ allocation.amount | money }})</li>
+                        <li>{{ allocation.discount_application.title | escape }} (−{{ allocation.amount | money_with_currency }})</li>
                       {%- endfor -%}
                     </ul>
                   {%- endif -%}
@@ -119,13 +119,13 @@
             {%- for discount in cart.cart_level_discount_applications -%}
               <div class="drawer__subtotal drawer__note">
                 <span>{{ discount.title | escape }}</span>
-                <span>−{{ discount.total_allocated_amount | money }}</span>
+                <span>−{{ discount.total_allocated_amount | money_with_currency }}</span>
               </div>
             {%- endfor -%}
           {%- endif -%}
           <div class="drawer__subtotal">
             <span>{{ 'cart.subtotal' | t }}</span>
-            <span>{{ cart.total_price | money }}</span>
+            <span>{{ cart.total_price | money_with_currency }}</span>
           </div>
           <form action="{{ routes.cart_url }}" method="post">
             <button type="submit" name="checkout" class="button button--primary button--block">

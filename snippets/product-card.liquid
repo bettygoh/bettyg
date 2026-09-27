@@ -37,13 +37,13 @@
         <span class="card__badge">{{ 'products.sold_out' | t }}</span>
       {%- else -%}
         {%- if product.compare_at_price > product.price -%}
-          <s>{{ product.compare_at_price | money }}</s>
+          <s>{{ product.compare_at_price | money_with_currency }}</s>
         {%- endif -%}
         {%- if product.price_varies -%}
-          {%- assign price_min = product.price_min | money -%}
+          {%- assign price_min = product.price_min | money_with_currency -%}
           {{ 'products.from_price' | t: price: price_min }}
         {%- else -%}
-          {{ product.price | money }}
+          {{ product.price | money_with_currency }}
         {%- endif -%}
       {%- endif -%}
     </span>

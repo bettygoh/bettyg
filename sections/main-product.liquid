@@ -104,9 +104,9 @@
             <h1 class="product__title">{{ product.title | escape }}</h1>
             <span class="product__price" data-product-price>
               {%- if current_variant.compare_at_price > current_variant.price -%}
-                <s>{{ current_variant.compare_at_price | money }}</s>
+                <s>{{ current_variant.compare_at_price | money_with_currency }}</s>
               {%- endif -%}
-              <span>{{ current_variant.price | money }}</span>
+              <span>{{ current_variant.price | money_with_currency }}</span>
             </span>
           </div>
 
@@ -208,7 +208,7 @@
               >
                 <span data-add-label>
                   {%- if current_variant.available -%}
-                    {{ 'products.add_to_bag' | t }} — {{ current_variant.price | money }}
+                    {{ 'products.add_to_bag' | t }} — {{ current_variant.price | money_with_currency }}
                   {%- else -%}
                     {{ 'products.sold_out' | t }}
                   {%- endif -%}

@@ -14,11 +14,11 @@
   <body>
     <main class="centered">
       <img src="{{ 'logo-circle.png' | asset_url }}" alt="{{ shop.name | escape }}" width="120" height="120">
-      <h1 class="content-title">{{ gift_card.initial_value | money }}</h1>
+      <h1 class="content-title">{{ gift_card.initial_value | money_with_currency }}</h1>
       {%- if gift_card.enabled == false or gift_card.expired -%}
         <p class="label">{{ 'gift_card.expired' | t }}</p>
       {%- elsif gift_card.balance != gift_card.initial_value -%}
-        {%- assign balance = gift_card.balance | money -%}
+        {%- assign balance = gift_card.balance | money_with_currency -%}
         <p class="label">{{ 'gift_card.remaining' | t: balance: balance }}</p>
       {%- endif -%}
       <p class="mono" style="font-size: 20px; letter-spacing: .12em;" id="GiftCardCode">{{ gift_card.code | format_code }}</p>

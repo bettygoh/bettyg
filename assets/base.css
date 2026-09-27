@@ -326,7 +326,7 @@ textarea.field { height: auto; min-height: 160px; padding: 14px 16px; resize: ve
 .hero-split {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-  min-height: calc(100vh - var(--header-offset));
+  min-height: calc(100vh - 69px); /* viewport minus the sticky header */
 }
 
 .hero-split__content {

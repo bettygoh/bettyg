@@ -5,7 +5,7 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "settings": {
-        "show": true,
+        "show": false,
         "text": "The Abide Cap — now available",
         "link": ""
       }

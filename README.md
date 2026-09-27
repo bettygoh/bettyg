@@ -50,7 +50,7 @@ Until it exists, the home page falls back to the bundled photos and static copy.
 - `layout/theme.liquid`: fonts, CSS variables, header/footer groups, cart drawer
 - `assets/base.css`: all styles (tokens in `snippets/css-variables.liquid`; radius 0 and no shadows throughout)
 - `assets/theme.js`: cart drawer (`/cart/add.js`, `/cart/change.js`, and the Section Rendering API refreshing `sections/cart-drawer`), focus trap and Esc, PDP gallery, quantity stepper with a live "Add to bag — $XX.XX" total, variant picker, mobile menu
-- Fonts: Newsreader and IBM Plex Mono are self-hosted in `assets/` (latin + latin-ext, SIL OFL)
+- Fonts: Cormorant Garamond (300/400 + italics) and DM Mono (400) are self-hosted in `assets/` (latin + latin-ext, SIL OFL). Labels, nav and buttons use sentence case.
 - Without JavaScript, add to bag falls back to the standard `/cart` page (`sections/main-cart.liquid`)
 
 Below 600px the header nav collapses into a "Menu" toggle. This wasn't in the design; the handoff suggested it.

@@ -20,7 +20,8 @@
     {%- if section.settings.eyebrow_1 != blank or section.settings.eyebrow_2 != blank -%}
       <div class="eyebrow hero-split__eyebrows">
         {%- if section.settings.eyebrow_1 != blank -%}<span>{{ section.settings.eyebrow_1 | escape }}</span>{%- endif -%}
-        {%- if section.settings.eyebrow_2 != blank -%}<span class="muted">{{ section.settings.eyebrow_2 | escape }}</span>{%- endif -%}
+        {%- if section.settings.eyebrow_1 != blank and section.settings.eyebrow_2 != blank -%}<span class="hero-split__rule" aria-hidden="true"></span>{%- endif -%}
+        {%- if section.settings.eyebrow_2 != blank -%}<span>{{ section.settings.eyebrow_2 | escape }}</span>{%- endif -%}
       </div>
     {%- endif -%}
 
@@ -95,8 +96,8 @@
     {
       "type": "text",
       "id": "eyebrow_2",
-      "label": "Eyebrow (muted)",
-      "default": "Caps & clothing"
+      "label": "Eyebrow (after the divider)",
+      "default": "The Abide Cap"
     },
     {
       "type": "inline_richtext",
@@ -142,7 +143,7 @@
       "type": "text",
       "id": "button_2_label",
       "label": "Secondary button label",
-      "default": "View all"
+      "info": "Leave blank to hide the button."
     },
     {
       "type": "url",

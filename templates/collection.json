@@ -6,9 +6,12 @@
         "heading": "",
         "show_description": false,
         "show_single_color": true,
-        "per_page": 24
+        "per_page": 24,
+        "redirect_single": true
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

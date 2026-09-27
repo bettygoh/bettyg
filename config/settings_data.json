@@ -19,7 +19,8 @@
           "empty_product": "abide-cap"
         }
       }
-    }
+    },
+    "label_case": "uppercase"
   },
   "presets": {
     "Default": {

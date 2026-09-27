@@ -6,11 +6,13 @@
       "type": "footer",
       "settings": {
         "menu": "",
-        "shop_link": "/collections/all",
+        "shop_link": "/products/abide-cap",
         "contact_link": "/pages/contact",
         "copyright": "abide.clo"
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

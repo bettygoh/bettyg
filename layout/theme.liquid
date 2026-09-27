@@ -34,7 +34,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="template-{{ template.name | handle }}">
+  <body class="template-{{ template.name | handle }}{% if settings.label_case == 'sentence' %} labels-sentence{% endif %}">
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
 
     {% sections 'header-group' %}

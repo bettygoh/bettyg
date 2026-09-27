@@ -14,9 +14,14 @@
       "type": "header",
       "settings": {
         "menu": "",
-        "product": "abide-cap"
+        "product": "abide-cap",
+        "show_shop_link": false,
+        "product_label": "Shop Abide Cap"
       }
     }
   },
-  "order": ["announcement-bar", "header"]
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
 }

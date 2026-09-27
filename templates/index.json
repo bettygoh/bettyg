@@ -4,14 +4,14 @@
       "type": "hero-split",
       "settings": {
         "eyebrow_1": "Drop 01",
-        "eyebrow_2": "Caps & clothing",
+        "eyebrow_2": "The Abide Cap",
         "heading_line_1": "Pieces to",
         "heading_line_2": "<em>remain</em> in.",
         "footnote": "John 15:4",
         "button_1_label": "Shop the cap",
         "product": "abide-cap",
         "button_1_link": "",
-        "button_2_label": "View all",
+        "button_2_label": "",
         "button_2_link": "/collections/all",
         "fallback_image": "sky",
         "image_alt": "abide cap"
@@ -22,7 +22,7 @@
       "settings": {
         "product": "abide-cap",
         "eyebrow": "Featured",
-        "heading": "The Abide Cap",
+        "heading": "The abide cap",
         "text": "<p>Washed red cotton twill, embroidered in white. <em>abide</em> on the front, John 15:4 on the side.</p>",
         "button_label": "Add to bag"
       }
@@ -37,5 +37,9 @@
       }
     }
   },
-  "order": ["hero", "featured", "banner"]
+  "order": [
+    "hero",
+    "featured",
+    "banner"
+  ]
 }

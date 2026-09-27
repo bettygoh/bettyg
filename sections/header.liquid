@@ -2,6 +2,7 @@
   assign menu = section.settings.menu
   assign featured = section.settings.product
   assign shop_label = 'sections.header.shop' | t
+  assign featured_label = section.settings.product_label | default: featured.title
 -%}
 
 <header class="site-header" {{ section.shopify_attributes }}>
@@ -22,9 +23,11 @@
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {%- endfor -%}
       {%- else -%}
-        <a href="{{ routes.all_products_collection_url }}"{% if request.path == routes.all_products_collection_url %} aria-current="page"{% endif %}>{{ shop_label }}</a>
+        {%- if section.settings.show_shop_link -%}
+          <a href="{{ routes.all_products_collection_url }}"{% if request.path == routes.all_products_collection_url %} aria-current="page"{% endif %}>{{ shop_label }}</a>
+        {%- endif -%}
         {%- if featured != blank -%}
-          <a href="{{ featured.url }}"{% if product.id == featured.id %} aria-current="page"{% endif %}>{{ featured.title | escape }}</a>
+          <a href="{{ featured.url }}"{% if product.id == featured.id %} aria-current="page"{% endif %}>{{ featured_label | escape }}</a>
         {%- endif -%}
       {%- endif -%}
     </nav>
@@ -59,9 +62,11 @@
         <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
       {%- endfor -%}
     {%- else -%}
-      <a href="{{ routes.all_products_collection_url }}">{{ shop_label }}</a>
+      {%- if section.settings.show_shop_link -%}
+        <a href="{{ routes.all_products_collection_url }}">{{ shop_label }}</a>
+      {%- endif -%}
       {%- if featured != blank -%}
-        <a href="{{ featured.url }}">{{ featured.title | escape }}</a>
+        <a href="{{ featured.url }}">{{ featured_label | escape }}</a>
       {%- endif -%}
     {%- endif -%}
   </nav>
@@ -76,13 +81,27 @@
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "info": "Leave empty to show \"Shop\" plus the featured product below."
+      "info": "Leave empty to use the links below."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shop_link",
+      "label": "Show \"Shop\" link",
+      "info": "Links to all products. Off by default while the store has a single product.",
+      "default": false
     },
     {
       "type": "product",
       "id": "product",
       "label": "Featured product link",
       "info": "Used when no menu is selected."
+    },
+    {
+      "type": "text",
+      "id": "product_label",
+      "label": "Featured product link label",
+      "info": "Defaults to the product title.",
+      "default": "Shop Abide Cap"
     }
   ],
   "enabled_on": {

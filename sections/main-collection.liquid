@@ -9,6 +9,12 @@
   endif
 -%}
 
+{%- if section.settings.redirect_single and collection.products_count == 1 and request.design_mode == false -%}
+  {%- assign only_product = collection.products.first -%}
+  <script>window.location.replace({{ only_product.url | json }});</script>
+  <noscript><meta http-equiv="refresh" content="0; url={{ only_product.url }}"></noscript>
+{%- endif -%}
+
 <section class="page-section">
   <div class="page-head">
     <h1 class="page-title">{{ heading | escape }}</h1>
@@ -58,6 +64,13 @@
       "id": "heading",
       "label": "Heading",
       "info": "Leave blank to use the collection title. The all-products collection shows \"Shop\"."
+    },
+    {
+      "type": "checkbox",
+      "id": "redirect_single",
+      "label": "Go straight to the product when there's only one",
+      "info": "Visitors to a collection with a single product land on its product page.",
+      "default": true
     },
     {
       "type": "checkbox",

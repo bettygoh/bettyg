@@ -50,6 +50,27 @@
     ]
   },
   {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "select",
+        "id": "label_case",
+        "label": "Labels, nav and buttons",
+        "options": [
+          {
+            "value": "uppercase",
+            "label": "UPPERCASE"
+          },
+          {
+            "value": "sentence",
+            "label": "Sentence case"
+          }
+        ],
+        "default": "uppercase"
+      }
+    ]
+  },
+  {
     "name": "Logo",
     "settings": [
       {

@@ -609,8 +609,7 @@ textarea.field { height: auto; min-height: 160px; padding: 14px 16px; resize: ve
 .breadcrumb a { opacity: .6; }
 .breadcrumb a:hover { opacity: 1; }
 .breadcrumb__sep { opacity: .4; }
-.breadcrumb [aria-current="page"],
-.keep-case { text-transform: none; letter-spacing: .04em; }
+
 
 .product__heading { display: flex; flex-direction: column; gap: 12px; }
 .product__title {
@@ -957,6 +956,21 @@ textarea.field { height: auto; min-height: 160px; padding: 14px 16px; resize: ve
 .specs:not(:has(.specs__row)) { display: none; }
 .section-main-page + .section-contact-form .page-section { padding-top: 0; }
 
+/* ---------- All caps for remaining small mono text ---------- */
+
+.specs__row,
+.drawer__subtotal,
+.drawer__note,
+.line-item__variant,
+.line-item__discounts,
+.cart-summary__rows,
+.form-message,
+.checkbox,
+.data-table {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
 /* ---------- Label case: sentence (Theme settings → Typography) ---------- */
 
 .labels-sentence .skip-link,
@@ -977,6 +991,15 @@ textarea.field { height: auto; min-height: 160px; padding: 14px 16px; resize: ve
 .labels-sentence .data-table th,
 .labels-sentence .site-footer__links,
 .labels-sentence .site-footer__copy,
+.labels-sentence .specs__row,
+.labels-sentence .drawer__subtotal,
+.labels-sentence .drawer__note,
+.labels-sentence .line-item__variant,
+.labels-sentence .line-item__discounts,
+.labels-sentence .cart-summary__rows,
+.labels-sentence .form-message,
+.labels-sentence .checkbox,
+.labels-sentence .data-table,
 .labels-sentence .hero-split__eyebrows {
   text-transform: none;
   letter-spacing: .02em;

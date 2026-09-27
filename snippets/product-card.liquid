@@ -1,0 +1,51 @@
+{%- comment -%}
+  Collection card: 4:5 image, title left, price right. Whole card links to the product.
+  Accepts:
+  - product: product object
+  - show_single_color: boolean. Appends " — Red" when the product has exactly one color.
+  - loading: 'lazy' | 'eager'
+{%- endcomment -%}
+{%- liquid
+  assign title = product.title
+  if show_single_color
+    assign color_option = product.options_by_name['Color'] | default: product.options_by_name['Colour']
+    if color_option and color_option.values.size == 1
+      assign title = title | append: ' — ' | append: color_option.values.first
+    endif
+  endif
+-%}
+<a href="{{ product.url }}" class="card">
+  <div class="card__media">
+    {%- if product.featured_media -%}
+      {{-
+        product.featured_media
+        | image_url: width: 1200
+        | image_tag:
+          loading: loading,
+          sizes: '(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw',
+          widths: '360, 540, 720, 900, 1200',
+          alt: product.featured_media.alt | default: title
+      -}}
+    {%- else -%}
+      {{- 'product-1' | placeholder_svg_tag -}}
+    {%- endif -%}
+  </div>
+  <div class="card__meta">
+    <span class="card__title">{{ title | escape }}</span>
+    <span class="card__price">
+      {%- if product.available == false -%}
+        <span class="card__badge">{{ 'products.sold_out' | t }}</span>
+      {%- else -%}
+        {%- if product.compare_at_price > product.price -%}
+          <s>{{ product.compare_at_price | money }}</s>
+        {%- endif -%}
+        {%- if product.price_varies -%}
+          {%- assign price_min = product.price_min | money -%}
+          {{ 'products.from_price' | t: price: price_min }}
+        {%- else -%}
+          {{ product.price | money }}
+        {%- endif -%}
+      {%- endif -%}
+    </span>
+  </div>
+</a>

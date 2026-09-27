@@ -1,0 +1,13 @@
+<section class="centered">
+  <h1 class="content-title">{{ 'errors.not_found_title' | t }}</h1>
+  <p>{{ 'errors.not_found_text' | t }}</p>
+  <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">{{ 'cart.continue' | t }}</a>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "tag": "div",
+  "class": "section-main-404"
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{%- comment -%}
+  Live-type wordmark: "abide" in Newsreader + ".clo" in IBM Plex Mono, top-aligned.
+  Accepts:
+  - size: 'small' (footer) | blank (header)
+{%- endcomment -%}
+<span class="wordmark{% if size == 'small' %} wordmark--small{% endif %}">
+  <span class="wordmark__name">{{ settings.wordmark_name | default: 'abide' }}</span>
+  {%- if settings.wordmark_suffix != blank -%}
+    <span class="wordmark__suffix">{{ settings.wordmark_suffix }}</span>
+  {%- endif -%}
+</span>

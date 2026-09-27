@@ -1,0 +1,23 @@
+{%- comment -%}
+  Address fields. Accepts:
+  - form: the address form object
+  - id: suffix for element ids ('new' or address.id)
+{%- endcomment -%}
+<div class="form-grid">
+  <input class="field" id="AddressFirst_{{ id }}" name="address[first_name]" autocomplete="given-name" value="{{ form.first_name }}" placeholder="{{ 'customer.first_name' | t }}" aria-label="{{ 'customer.first_name' | t }}">
+  <input class="field" id="AddressLast_{{ id }}" name="address[last_name]" autocomplete="family-name" value="{{ form.last_name }}" placeholder="{{ 'customer.last_name' | t }}" aria-label="{{ 'customer.last_name' | t }}">
+  <input class="field span-2" id="AddressCompany_{{ id }}" name="address[company]" autocomplete="organization" value="{{ form.company }}" placeholder="{{ 'customer.addresses.company' | t }}" aria-label="{{ 'customer.addresses.company' | t }}">
+  <input class="field span-2" id="AddressAddress1_{{ id }}" name="address[address1]" autocomplete="address-line1" value="{{ form.address1 }}" placeholder="{{ 'customer.addresses.address1' | t }}" aria-label="{{ 'customer.addresses.address1' | t }}">
+  <input class="field span-2" id="AddressAddress2_{{ id }}" name="address[address2]" autocomplete="address-line2" value="{{ form.address2 }}" placeholder="{{ 'customer.addresses.address2' | t }}" aria-label="{{ 'customer.addresses.address2' | t }}">
+  <input class="field" id="AddressCity_{{ id }}" name="address[city]" autocomplete="address-level2" value="{{ form.city }}" placeholder="{{ 'customer.addresses.city' | t }}" aria-label="{{ 'customer.addresses.city' | t }}">
+  <input class="field" id="AddressZip_{{ id }}" name="address[zip]" autocomplete="postal-code" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" aria-label="{{ 'customer.addresses.zip' | t }}">
+  <select class="field" id="AddressCountry_{{ id }}" name="address[country]" data-default="{{ form.country }}" autocomplete="country" aria-label="{{ 'customer.addresses.country' | t }}">
+    {{ all_country_option_tags }}
+  </select>
+  <select class="field" id="AddressProvince_{{ id }}" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1" aria-label="{{ 'customer.addresses.province' | t }}"></select>
+  <input class="field span-2" type="tel" id="AddressPhone_{{ id }}" name="address[phone]" autocomplete="tel" value="{{ form.phone }}" placeholder="{{ 'customer.addresses.phone' | t }}" aria-label="{{ 'customer.addresses.phone' | t }}">
+</div>
+<label class="checkbox">
+  {{ form.set_as_default_checkbox }}
+  {{ 'customer.addresses.set_default' | t }}
+</label>

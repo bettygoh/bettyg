@@ -1,0 +1,22 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show": true,
+        "text": "The Abide Cap — now available",
+        "link": ""
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "",
+        "product": "abide-cap"
+      }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

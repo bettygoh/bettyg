@@ -1,0 +1,32 @@
+<section class="page-section">
+  <div class="auth">
+    <h1 class="content-title">{{ 'customer.register.title' | t }}</h1>
+    {%- form 'create_customer', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="form-grid">
+        <label class="visually-hidden" for="RegFirst">{{ 'customer.first_name' | t }}</label>
+        <input class="field" id="RegFirst" name="customer[first_name]" autocomplete="given-name" placeholder="{{ 'customer.first_name' | t }}" value="{{ form.first_name }}">
+        <label class="visually-hidden" for="RegLast">{{ 'customer.last_name' | t }}</label>
+        <input class="field" id="RegLast" name="customer[last_name]" autocomplete="family-name" placeholder="{{ 'customer.last_name' | t }}" value="{{ form.last_name }}">
+        <label class="visually-hidden" for="RegEmail">{{ 'contact.email' | t }}</label>
+        <input class="field span-2" type="email" id="RegEmail" name="customer[email]" autocomplete="email" required placeholder="{{ 'contact.email' | t }}" value="{{ form.email }}">
+        <label class="visually-hidden" for="RegPassword">{{ 'password.password' | t }}</label>
+        <input class="field span-2" type="password" id="RegPassword" name="customer[password]" autocomplete="new-password" required placeholder="{{ 'password.password' | t }}">
+      </div>
+      <button type="submit" class="button button--primary button--block">{{ 'customer.register.submit' | t }}</button>
+      <div class="auth__links">
+        <a href="{{ routes.account_login_url }}" class="text-button">{{ 'customer.register.have_account' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Register",
+  "tag": "div",
+  "class": "section-main-register"
+}
+{% endschema %}

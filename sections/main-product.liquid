@@ -1,0 +1,356 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign media_list = product.media
+  assign active_media = current_variant.featured_media | default: product.featured_media
+-%}
+
+<section
+  class="product"
+  data-product-section
+  id="Product-{{ section.id }}"
+>
+  {%- comment -%} Gallery {%- endcomment -%}
+  <div class="gallery">
+    <div class="gallery__main">
+      {%- if media_list.size > 0 -%}
+        {%- for media in media_list -%}
+          {%- liquid
+            assign is_active = false
+            if media.id == active_media.id
+              assign is_active = true
+            endif
+            assign loading = 'lazy'
+            if is_active
+              assign loading = 'eager'
+            endif
+          -%}
+          {%- capture media_img -%}
+            {{-
+              media.preview_image
+              | image_url: width: 2000
+              | image_tag:
+                loading: loading,
+                sizes: '(min-width: 900px) 50vw, 100vw',
+                widths: '600, 900, 1200, 1600, 2000',
+                alt: media.alt,
+                data-media: media.id
+            -}}
+          {%- endcapture -%}
+          {%- if is_active -%}
+            {{- media_img -}}
+          {%- else -%}
+            {{- media_img | replace_first: '<img ', '<img hidden ' -}}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {{- 'product-1' | placeholder_svg_tag -}}
+      {%- endif -%}
+    </div>
+
+    {%- if media_list.size > 1 -%}
+      <ul class="gallery__thumbs">
+        {%- for media in media_list -%}
+          <li>
+            <button
+              type="button"
+              class="gallery__thumb"
+              data-thumb="{{ media.id }}"
+              aria-current="{% if media.id == active_media.id %}true{% else %}false{% endif %}"
+              aria-label="{{ 'products.show_image' | t: number: forloop.index }}"
+            >
+              {{-
+                media.preview_image
+                | image_url: width: 480
+                | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 16vw, 33vw', widths: '160, 320, 480', alt: ''
+              -}}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Info {%- endcomment -%}
+  <div class="product__info">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign prev_type = ''
+        assign next_type = ''
+        if forloop.index0 > 0
+          assign prev_index = forloop.index0 | minus: 1
+          assign prev_type = section.blocks[prev_index].type
+        endif
+        if forloop.last == false
+          assign next_type = section.blocks[forloop.index].type
+        endif
+      -%}
+
+      {%- case block.type -%}
+        {%- when 'breadcrumb' -%}
+          <nav class="breadcrumb" aria-label="{{ 'products.breadcrumb' | t }}" {{ block.shopify_attributes }}>
+            {%- if collection -%}
+              <a href="{{ collection.url }}">
+                {%- if collection.handle == 'all' %}{{ 'collections.shop' | t }}{% else %}{{ collection.title | escape }}{% endif -%}
+              </a>
+            {%- else -%}
+              <a href="{{ block.settings.link | default: routes.all_products_collection_url }}">{{ block.settings.label | default: 'Shop' | escape }}</a>
+            {%- endif -%}
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <span aria-current="page">{{ product.title | escape }}</span>
+          </nav>
+
+        {%- when 'title' -%}
+          <div class="product__heading" {{ block.shopify_attributes }}>
+            <h1 class="product__title">{{ product.title | escape }}</h1>
+            <span class="product__price" data-product-price>
+              {%- if current_variant.compare_at_price > current_variant.price -%}
+                <s>{{ current_variant.compare_at_price | money }}</s>
+              {%- endif -%}
+              <span>{{ current_variant.price | money }}</span>
+            </span>
+          </div>
+
+        {%- when 'variant_picker' -%}
+          {%- liquid
+            assign show_picker = true
+            if product.has_only_default_variant
+              assign show_picker = false
+            elsif product.variants.size == 1 and block.settings.show_single == false
+              assign show_picker = false
+            endif
+          -%}
+          {%- if show_picker -%}
+            <div class="stack" {{ block.shopify_attributes }}>
+              {%- for option in product.options_with_values -%}
+                {%- assign option_name = option.name | downcase -%}
+                {%- assign is_color = false -%}
+                {%- if option_name == 'color' or option_name == 'colour' -%}
+                  {%- assign is_color = true -%}
+                {%- endif -%}
+                <fieldset class="option" data-option>
+                  <legend class="option__legend label">
+                    {{ option.name | escape }} — <span data-option-selected>{{ option.selected_value | escape }}</span>
+                  </legend>
+                  <div class="option__values">
+                    {%- for value in option.values -%}
+                      {%- liquid
+                        assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index
+                        assign checked = false
+                        if option.selected_value == value
+                          assign checked = true
+                        endif
+                      -%}
+                      {%- if is_color -%}
+                        {%- liquid
+                          assign swatch = value | handleize
+                          if value.swatch.color
+                            assign swatch = value.swatch.color
+                          elsif swatch == 'red'
+                            assign swatch = 'var(--swatch-red)'
+                          endif
+                        -%}
+                        <label class="swatch" style="--swatch: {{ swatch }}" title="{{ value | escape }}">
+                          <input
+                            type="radio"
+                            id="{{ input_id }}"
+                            name="option-{{ section.id }}-{{ option.position }}"
+                            value="{{ value | escape }}"
+                            data-option-input
+                            {% if checked %}checked{% endif %}
+                          >
+                          <span class="visually-hidden">{{ value | escape }}</span>
+                        </label>
+                      {%- else -%}
+                        <label class="pill">
+                          <input
+                            type="radio"
+                            id="{{ input_id }}"
+                            name="option-{{ section.id }}-{{ option.position }}"
+                            value="{{ value | escape }}"
+                            data-option-input
+                            {% if checked %}checked{% endif %}
+                          >
+                          {{ value | escape }}
+                        </label>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+        {%- when 'buy_buttons' -%}
+          <div {{ block.shopify_attributes }}>
+            {%- form 'product', product, class: 'product__buy', data-product-form: '', novalidate: 'novalidate' -%}
+              <input type="hidden" name="id" value="{{ current_variant.id }}">
+              <div class="stepper" data-stepper>
+                <button type="button" class="stepper__btn" data-qty-step="-1" aria-label="{{ 'products.decrease' | t }}">−</button>
+                <input
+                  class="stepper__value"
+                  type="number"
+                  name="quantity"
+                  inputmode="numeric"
+                  min="1"
+                  value="1"
+                  data-qty-input
+                  aria-label="{{ 'products.quantity' | t }}"
+                >
+                <button type="button" class="stepper__btn" data-qty-step="1" aria-label="{{ 'products.increase' | t }}">+</button>
+              </div>
+              <button
+                type="submit"
+                class="button button--primary product__add"
+                data-label-add="{{ 'products.add_to_bag' | t }}"
+                data-label-sold-out="{{ 'products.sold_out' | t }}"
+                data-label-unavailable="{{ 'products.unavailable' | t }}"
+                {% unless current_variant.available %}disabled data-sold-out{% endunless %}
+              >
+                <span data-add-label>
+                  {%- if current_variant.available -%}
+                    {{ 'products.add_to_bag' | t }} — {{ current_variant.price | money }}
+                  {%- else -%}
+                    {{ 'products.sold_out' | t }}
+                  {%- endif -%}
+                </span>
+              </button>
+            {%- endform -%}
+            <p class="form-message form-message--error" data-product-error role="alert" hidden></p>
+          </div>
+
+        {%- when 'description' -%}
+          {%- if product.description != blank -%}
+            <div class="product__description" {{ block.shopify_attributes }}>{{ product.description }}</div>
+          {%- endif -%}
+
+        {%- when 'spec' -%}
+          {%- liquid
+            assign key = block.settings.metafield_key | strip
+            assign value = ''
+            if key != blank
+              assign value = product.metafields.custom[key].value
+            endif
+            if value == blank
+              assign value = block.settings.fallback
+            endif
+          -%}
+          {%- if prev_type != 'spec' -%}<dl class="specs">{%- endif -%}
+          {%- if value != blank -%}
+            <div class="specs__row" {{ block.shopify_attributes }}>
+              <dt>{{ block.settings.label | escape }}</dt>
+              <dd>{{ value | escape }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if next_type != 'spec' -%}</dl>{%- endif -%}
+
+        {%- when 'text' -%}
+          <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+
+        {%- when '@app' -%}
+          {% render block %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <script type="application/json" data-product-variants>
+    {{ product.variants | json }}
+  </script>
+</section>
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "div",
+  "class": "section-main-product",
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "breadcrumb",
+      "name": "Breadcrumb",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Parent label",
+          "default": "Shop"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Parent link",
+          "default": "/collections/all"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Title & price",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_single",
+          "label": "Show options when there is only one variant",
+          "info": "Keeps the \"Color — Red\" swatch visible on single-color products.",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Quantity & add to bag",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "spec",
+      "name": "Spec row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Material"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Metafield key (custom namespace)",
+          "info": "Reads product.metafields.custom.<key>, e.g. material, fit, detail."
+        },
+        {
+          "type": "text",
+          "id": "fallback",
+          "label": "Fallback value",
+          "info": "Shown when the product has no value for the metafield."
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,139 @@
+{%- comment -%}
+  Cart drawer contents. Rendered by sections/cart-drawer.liquid and refreshed
+  through the Section Rendering API (the [data-drawer-contents] node is swapped).
+{%- endcomment -%}
+<div
+  id="CartDrawer"
+  class="drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="CartDrawerTitle"
+  aria-hidden="true"
+  inert
+>
+  <div class="drawer__overlay" data-cart-close aria-hidden="true"></div>
+
+  <aside class="drawer__panel">
+    <div class="drawer__contents" data-drawer-contents data-cart-count-value="{{ cart.item_count }}">
+      <div class="drawer__header">
+        <h2 class="drawer__title" id="CartDrawerTitle">
+          {{- 'sections.header.bag' | t }} ({{ cart.item_count }})
+        </h2>
+        <button type="button" class="text-button" data-cart-close>{{ 'cart.close' | t }}</button>
+      </div>
+
+      <div class="drawer__body">
+        <p class="form-message form-message--error" data-drawer-error role="alert" hidden></p>
+
+        {%- if cart.item_count > 0 -%}
+          <ul class="line-items" aria-label="{{ 'cart.items' | t }}">
+            {%- for item in cart.items -%}
+              <li class="line-item">
+                <a href="{{ item.url }}" class="line-item__media" tabindex="-1" aria-hidden="true">
+                  {%- if item.image -%}
+                    {{- item.image | image_url: width: 288 | image_tag: width: 96, height: 120, loading: 'lazy', alt: '', sizes: '96px', widths: '96, 192, 288' -}}
+                  {%- else -%}
+                    {{- 'product-1' | placeholder_svg_tag -}}
+                  {%- endif -%}
+                </a>
+
+                <div class="line-item__info">
+                  <div class="line-item__top">
+                    <a href="{{ item.url }}" class="line-item__title">{{ item.product.title | escape }}</a>
+                    <span class="line-item__price">
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <s>{{ item.original_line_price | money }}</s>
+                      {%- endif -%}
+                      {{ item.final_line_price | money }}
+                    </span>
+                  </div>
+
+                  {% render 'cart-line-variant', item: item %}
+
+                  {%- if item.line_level_discount_allocations.size > 0 -%}
+                    <ul class="line-item__discounts">
+                      {%- for allocation in item.line_level_discount_allocations -%}
+                        <li>{{ allocation.discount_application.title | escape }} (−{{ allocation.amount | money }})</li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+
+                  <div class="line-item__actions">
+                    <div class="stepper stepper--small">
+                      <button
+                        type="button"
+                        class="stepper__btn"
+                        data-line-change
+                        data-line="{{ forloop.index }}"
+                        data-quantity="{{ item.quantity | minus: 1 }}"
+                        data-focus-key="dec-{{ item.key }}"
+                        aria-label="{{ 'cart.decrease' | t: title: item.product.title }}"
+                      >−</button>
+                      <input
+                        class="stepper__value"
+                        type="number"
+                        inputmode="numeric"
+                        min="0"
+                        value="{{ item.quantity }}"
+                        data-line-input
+                        data-line="{{ forloop.index }}"
+                        data-focus-key="qty-{{ item.key }}"
+                        aria-label="{{ 'cart.quantity_for' | t: title: item.product.title }}"
+                      >
+                      <button
+                        type="button"
+                        class="stepper__btn"
+                        data-line-change
+                        data-line="{{ forloop.index }}"
+                        data-quantity="{{ item.quantity | plus: 1 }}"
+                        data-focus-key="inc-{{ item.key }}"
+                        aria-label="{{ 'cart.increase' | t: title: item.product.title }}"
+                      >+</button>
+                    </div>
+                    <button
+                      type="button"
+                      class="line-item__remove"
+                      data-line-change
+                      data-line="{{ forloop.index }}"
+                      data-quantity="0"
+                      aria-label="{{ 'cart.remove_title' | t: title: item.product.title }}"
+                    >
+                      {{- 'cart.remove' | t -}}
+                    </button>
+                  </div>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <div class="drawer__empty">
+            <p>{{ 'cart.empty' | t }}</p>
+            <a href="{{ empty_url }}" class="button button--primary">{{ 'cart.shop_the_cap' | t }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if cart.item_count > 0 -%}
+        <div class="drawer__footer">
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <div class="drawer__subtotal drawer__note">
+                <span>{{ discount.title | escape }}</span>
+                <span>−{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+          <div class="drawer__subtotal">
+            <span>{{ 'cart.subtotal' | t }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+          <form action="{{ routes.cart_url }}" method="post">
+            <button type="submit" name="checkout" class="button button--primary button--block">
+              {{- 'cart.checkout' | t -}}
+            </button>
+          </form>
+        </div>
+      {%- endif -%}
+    </div>
+  </aside>
+</div>

@@ -1,0 +1,44 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "breadcrumb": {
+          "type": "breadcrumb",
+          "settings": { "label": "Shop", "link": "/collections/all" }
+        },
+        "title": { "type": "title", "settings": {} },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": { "show_single": true }
+        },
+        "buy_buttons": { "type": "buy_buttons", "settings": {} },
+        "description": { "type": "description", "settings": {} },
+        "spec_material": {
+          "type": "spec",
+          "settings": { "label": "Material", "metafield_key": "material", "fallback": "" }
+        },
+        "spec_fit": {
+          "type": "spec",
+          "settings": { "label": "Fit", "metafield_key": "fit", "fallback": "" }
+        },
+        "spec_detail": {
+          "type": "spec",
+          "settings": { "label": "Detail", "metafield_key": "detail", "fallback": "" }
+        }
+      },
+      "block_order": [
+        "breadcrumb",
+        "title",
+        "variant_picker",
+        "buy_buttons",
+        "description",
+        "spec_material",
+        "spec_fit",
+        "spec_detail"
+      ],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,22 @@
+<style>
+  :root {
+    --cream: {{ settings.color_cream }};
+    --ink: {{ settings.color_ink }};
+    --ink-rgb: {{ settings.color_ink.red }}, {{ settings.color_ink.green }}, {{ settings.color_ink.blue }};
+    --accent: {{ settings.color_accent }};
+    --swatch-red: {{ settings.color_swatch_red }};
+    --image-bg: {{ settings.color_image_bg }};
+    --panel: {{ settings.color_panel }};
+    --rule: rgba(var(--ink-rgb), .14);
+    --rule-strong: rgba(var(--ink-rgb), .2);
+    --input-border: rgba(var(--ink-rgb), .35);
+    --overlay: rgba(var(--ink-rgb), .35);
+
+    --font-serif: 'Newsreader', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    --gutter: clamp(20px, 4vw, 56px);
+    --section-pad: clamp(64px, 10vw, 140px);
+    --header-offset: 110px;
+  }
+</style>

@@ -1,0 +1,100 @@
+<section class="page-section">
+  <div class="page-head">
+    <h1 class="page-title">{{ 'cart.title' | t }}</h1>
+    <span class="page-head__meta">{{ 'collections.count' | t: count: cart.item_count }}</span>
+  </div>
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" id="CartForm" class="cart-page" novalidate>
+      <ul class="line-items" aria-label="{{ 'cart.items' | t }}">
+        {%- for item in cart.items -%}
+          <li class="line-item">
+            <a href="{{ item.url }}" class="line-item__media" tabindex="-1" aria-hidden="true">
+              {%- if item.image -%}
+                {{- item.image | image_url: width: 288 | image_tag: width: 96, height: 120, loading: 'lazy', alt: '', sizes: '96px', widths: '96, 192, 288' -}}
+              {%- else -%}
+                {{- 'product-1' | placeholder_svg_tag -}}
+              {%- endif -%}
+            </a>
+            <div class="line-item__info">
+              <div class="line-item__top">
+                <a href="{{ item.url }}" class="line-item__title">{{ item.product.title | escape }}</a>
+                <span class="line-item__price">{{ item.final_line_price | money }}</span>
+              </div>
+              {% render 'cart-line-variant', item: item %}
+              <div class="line-item__actions">
+                <div class="stepper stepper--small" data-stepper data-autosubmit>
+                  <button type="button" class="stepper__btn" data-qty-step="-1" aria-label="{{ 'cart.decrease' | t: title: item.product.title }}">−</button>
+                  <input
+                    class="stepper__value"
+                    type="number"
+                    name="updates[]"
+                    inputmode="numeric"
+                    min="0"
+                    value="{{ item.quantity }}"
+                    aria-label="{{ 'cart.quantity_for' | t: title: item.product.title }}"
+                  >
+                  <button type="button" class="stepper__btn" data-qty-step="1" aria-label="{{ 'cart.increase' | t: title: item.product.title }}">+</button>
+                </div>
+                <a href="{{ item.url_to_remove }}" class="line-item__remove" aria-label="{{ 'cart.remove_title' | t: title: item.product.title }}">
+                  {{- 'cart.remove' | t -}}
+                </a>
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <aside class="cart-summary">
+        <div class="label">{{ 'cart.summary' | t }}</div>
+
+        {%- if section.settings.show_note -%}
+          <div class="stack">
+            <label class="label" for="CartNote">{{ 'cart.note' | t }}</label>
+            <textarea class="field" name="note" id="CartNote">{{ cart.note }}</textarea>
+          </div>
+        {%- endif -%}
+
+        <div class="cart-summary__rows">
+          <div class="cart-summary__row"><span>{{ 'cart.subtotal' | t }}</span><span>{{ cart.items_subtotal_price | money }}</span></div>
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <div class="cart-summary__row"><span>{{ discount.title | escape }}</span><span>−{{ discount.total_allocated_amount | money }}</span></div>
+          {%- endfor -%}
+          <div class="cart-summary__row muted"><span>{{ 'cart.shipping' | t }}</span><span>{{ 'cart.calculated_next' | t }}</span></div>
+        </div>
+        <div class="cart-summary__total">
+          <span>{{ 'cart.total' | t }}</span>
+          <span>{{ cart.total_price | money_with_currency }}</span>
+        </div>
+
+        <div class="stack">
+          <button type="submit" name="checkout" class="button button--primary button--block">{{ 'cart.checkout' | t }}</button>
+          <noscript>
+            <button type="submit" name="update" class="button button--secondary button--block">{{ 'cart.update' | t }}</button>
+          </noscript>
+        </div>
+      </aside>
+    </form>
+  {%- else -%}
+    <div class="empty-state">
+      <p>{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">{{ 'cart.continue' | t }}</a>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "div",
+  "class": "section-main-cart",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Show order note",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

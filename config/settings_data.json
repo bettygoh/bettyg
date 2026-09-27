@@ -1,0 +1,34 @@
+{
+  "current": {
+    "color_cream": "#EAE6DA",
+    "color_ink": "#221F1A",
+    "color_accent": "#B3122A",
+    "color_swatch_red": "#C8102E",
+    "color_image_bg": "#DDD8CA",
+    "color_panel": "#E1DCCE",
+    "wordmark_name": "abide",
+    "wordmark_suffix": ".clo",
+    "logo_width": 120,
+    "one_size_label": "One size",
+    "social_instagram_link": "",
+    "social_tiktok_link": "",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "empty_product": "abide-cap"
+        }
+      }
+    }
+  },
+  "presets": {
+    "Default": {
+      "color_cream": "#EAE6DA",
+      "color_ink": "#221F1A",
+      "color_accent": "#B3122A",
+      "color_swatch_red": "#C8102E",
+      "color_image_bg": "#DDD8CA",
+      "color_panel": "#E1DCCE"
+    }
+  }
+}

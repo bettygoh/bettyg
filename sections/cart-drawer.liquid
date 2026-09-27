@@ -1,0 +1,21 @@
+{%- liquid
+  assign empty_url = routes.all_products_collection_url
+  if section.settings.empty_product != blank
+    assign empty_url = section.settings.empty_product.url
+  endif
+-%}
+{% render 'cart-drawer', empty_url: empty_url %}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "product",
+      "id": "empty_product",
+      "label": "\"Shop the cap\" button product",
+      "info": "Where the empty-bag button links. Defaults to the Shop page."
+    }
+  ]
+}
+{% endschema %}

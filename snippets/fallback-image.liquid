@@ -1,0 +1,35 @@
+{%- comment -%}
+  Renders one of the bundled brand photos from assets/ when no image has been
+  picked in the theme editor.
+  Accepts:
+  - name: 'sky' | 'still' | 'bench'
+  - alt: alt text
+  - loading: 'lazy' | 'eager' (default lazy)
+  - style: optional inline style (e.g. object-position)
+  - sizes: optional sizes attribute
+{%- endcomment -%}
+{%- liquid
+  case name
+    when 'still'
+      assign file = 'cap-still.jpg'
+      assign w = 1435
+      assign h = 1096
+    when 'bench'
+      assign file = 'cap-bench.jpg'
+      assign w = 1800
+      assign h = 1800
+    else
+      assign file = 'cap-sky.jpg'
+      assign w = 1660
+      assign h = 2800
+  endcase
+-%}
+<img
+  src="{{ file | asset_url }}"
+  alt="{{ alt | escape }}"
+  width="{{ w }}"
+  height="{{ h }}"
+  loading="{{ loading | default: 'lazy' }}"
+  {% if sizes %}sizes="{{ sizes }}"{% endif %}
+  {% if style %}style="{{ style }}"{% endif %}
+>

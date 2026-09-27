@@ -1,0 +1,188 @@
+{%- liquid
+  assign primary_url = section.settings.button_1_link
+  if primary_url == blank
+    if section.settings.product != blank
+      assign primary_url = section.settings.product.url
+    else
+      assign primary_url = routes.all_products_collection_url
+    endif
+  endif
+
+  assign position = 'center 60%'
+  if section.settings.image != blank and section.settings.image.presentation.focal_point != blank
+    assign position = section.settings.image.presentation.focal_point
+  endif
+  assign image_style = 'object-position: ' | append: position
+-%}
+
+<section class="hero-split" aria-labelledby="HeroTitle-{{ section.id }}">
+  <div class="hero-split__content">
+    {%- if section.settings.eyebrow_1 != blank or section.settings.eyebrow_2 != blank -%}
+      <div class="eyebrow hero-split__eyebrows">
+        {%- if section.settings.eyebrow_1 != blank -%}<span>{{ section.settings.eyebrow_1 | escape }}</span>{%- endif -%}
+        {%- if section.settings.eyebrow_2 != blank -%}<span class="muted">{{ section.settings.eyebrow_2 | escape }}</span>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hero-split__body">
+      <h1 class="hero-split__title" id="HeroTitle-{{ section.id }}">
+        {{- section.settings.heading_line_1 -}}
+        {%- if section.settings.heading_line_1 != blank and section.settings.heading_line_2 != blank %}<br>{% endif -%}
+        {{- section.settings.heading_line_2 -}}
+      </h1>
+
+      {%- if section.settings.button_1_label != blank or section.settings.button_2_label != blank -%}
+        <div class="button-row">
+          {%- if section.settings.button_1_label != blank -%}
+            <a href="{{ primary_url }}" class="button button--primary">{{ section.settings.button_1_label | escape }}</a>
+          {%- endif -%}
+          {%- if section.settings.button_2_label != blank -%}
+            <a href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}" class="button button--secondary">
+              {{- section.settings.button_2_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.footnote != blank -%}
+      <div class="eyebrow muted">{{ section.settings.footnote | escape }}</div>
+    {%- else -%}
+      <div aria-hidden="true"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="hero-split__media">
+    {%- if section.settings.image != blank -%}
+      {{-
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '(min-width: 900px) 50vw, 100vw',
+          widths: '600, 900, 1200, 1600, 2000, 2400',
+          style: image_style,
+          alt: section.settings.image.alt
+      -}}
+    {%- else -%}
+      {% render 'fallback-image',
+        name: section.settings.fallback_image,
+        alt: section.settings.image_alt,
+        loading: 'eager',
+        style: image_style
+      %}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero (split)",
+  "tag": "div",
+  "class": "section-hero-split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_1",
+      "label": "Eyebrow",
+      "default": "Drop 01"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_2",
+      "label": "Eyebrow (muted)",
+      "default": "Caps & clothing"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading_line_1",
+      "label": "Heading — line 1",
+      "default": "Pieces to"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading_line_2",
+      "label": "Heading — line 2",
+      "info": "Use italic for the emphasised word.",
+      "default": "<em>remain</em> in."
+    },
+    {
+      "type": "text",
+      "id": "footnote",
+      "label": "Footnote",
+      "default": "John 15:4"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Primary button label",
+      "default": "Shop the cap"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Primary button product"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Primary button link",
+      "info": "Overrides the product above."
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Secondary button label",
+      "default": "View all"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Secondary button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Set a focal point on the image to control cropping. Defaults to center 60%."
+    },
+    {
+      "type": "select",
+      "id": "fallback_image",
+      "label": "Built-in image",
+      "info": "Used when no image is picked above.",
+      "options": [
+        { "value": "sky", "label": "Sky" },
+        { "value": "still", "label": "Still life" },
+        { "value": "bench", "label": "Bench" }
+      ],
+      "default": "sky"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Built-in image alt text",
+      "default": "abide cap"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero (split)"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,65 @@
+<article class="page-section">
+  <div class="article">
+    <div class="content-head">
+      <nav class="breadcrumb" aria-label="{{ 'products.breadcrumb' | t }}">
+        <a href="{{ blog.url }}">{{ blog.title | escape }}</a>
+        <span class="breadcrumb__sep" aria-hidden="true">/</span>
+        <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+      </nav>
+      <h1 class="content-title">{{ article.title | escape }}</h1>
+    </div>
+
+    {%- if article.image -%}
+      <div class="article__media">
+        {{- article.image | image_url: width: 1600 | image_tag: loading: 'eager', sizes: '(min-width: 800px) 720px, 100vw', widths: '600, 900, 1200, 1600' -}}
+      </div>
+    {%- endif -%}
+
+    <div class="rte">{{ article.content }}</div>
+
+    {%- if blog.comments_enabled? -%}
+      <div class="stack stack--lg">
+        {%- if article.comments_count > 0 -%}
+          <h2 class="label">{{ 'blog.comments' | t: count: article.comments_count }}</h2>
+          {%- paginate article.comments by 20 -%}
+            {%- for comment in article.comments -%}
+              <div class="stack" style="border-top: 1px solid var(--rule); padding-top: 16px;">
+                <div class="rte">{{ comment.content }}</div>
+                <span class="label muted">{{ comment.author | escape }} · {{ comment.created_at | time_tag: format: 'date' }}</span>
+              </div>
+            {%- endfor -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endpaginate -%}
+        {%- endif -%}
+
+        {%- form 'new_comment', article, class: 'form-stack' -%}
+          <h2 class="label">{{ 'blog.leave_comment' | t }}</h2>
+          {%- if form.posted_successfully? -%}
+            <p class="form-message" role="status">
+              {%- if blog.moderated? -%}{{ 'blog.success_moderated' | t }}{%- else -%}{{ 'blog.success' | t }}{%- endif -%}
+            </p>
+          {%- elsif form.errors -%}
+            <div class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</div>
+          {%- endif -%}
+          <div class="form-grid">
+            <label class="visually-hidden" for="CommentAuthor">{{ 'contact.name' | t }}</label>
+            <input class="field" id="CommentAuthor" name="comment[author]" required placeholder="{{ 'contact.name' | t }}" value="{{ form.author }}">
+            <label class="visually-hidden" for="CommentEmail">{{ 'contact.email' | t }}</label>
+            <input class="field" id="CommentEmail" type="email" name="comment[email]" required placeholder="{{ 'contact.email' | t }}" value="{{ form.email }}">
+          </div>
+          <label class="visually-hidden" for="CommentBody">{{ 'contact.message' | t }}</label>
+          <textarea class="field" id="CommentBody" name="comment[body]" required placeholder="{{ 'contact.message' | t }}">{{ form.body }}</textarea>
+          <div><button type="submit" class="button button--primary">{{ 'blog.post' | t }}</button></div>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "div",
+  "class": "section-main-article"
+}
+{% endschema %}

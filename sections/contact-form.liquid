@@ -1,0 +1,47 @@
+<section class="page-section page-section--narrow">
+  {%- if section.settings.heading != blank -%}
+    <div class="content-head">
+      <h2 class="content-title">{{ section.settings.heading | escape }}</h2>
+    </div>
+  {%- endif -%}
+
+  {%- form 'contact', id: 'ContactForm', class: 'form-stack' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="form-message" role="status">{{ 'contact.success' | t }}</p>
+    {%- elsif form.errors -%}
+      <div class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</div>
+    {%- endif -%}
+
+    <div class="form-grid">
+      <label class="visually-hidden" for="ContactName">{{ 'contact.name' | t }}</label>
+      <input class="field" id="ContactName" name="contact[name]" autocomplete="name" placeholder="{{ 'contact.name' | t }}" value="{{ form.name }}">
+      <label class="visually-hidden" for="ContactEmail">{{ 'contact.email' | t }}</label>
+      <input class="field" id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'contact.email' | t }}" value="{{ form.email }}">
+    </div>
+    <label class="visually-hidden" for="ContactBody">{{ 'contact.message' | t }}</label>
+    <textarea class="field" id="ContactBody" name="contact[body]" placeholder="{{ 'contact.message' | t }}">{{ form.body }}</textarea>
+    <div>
+      <button type="submit" class="button button--primary">{{ 'contact.send' | t }}</button>
+    </div>
+  {%- endform -%}
+</section>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "div",
+  "class": "section-contact-form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

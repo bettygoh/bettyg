@@ -1,0 +1,83 @@
+{%- liquid
+  assign position = 'center'
+  if section.settings.image != blank and section.settings.image.presentation.focal_point != blank
+    assign position = section.settings.image.presentation.focal_point
+  endif
+  assign image_style = 'object-position: ' | append: position
+-%}
+
+<section class="image-banner{% if section.settings.full_width %} image-banner--full{% endif %}">
+  <div class="image-banner__frame">
+    {%- if section.settings.link != blank -%}<a href="{{ section.settings.link }}">{%- endif -%}
+    {%- if section.settings.image != blank -%}
+      {{-
+        section.settings.image
+        | image_url: width: 2800
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '750, 1100, 1500, 2000, 2800',
+          style: image_style,
+          alt: section.settings.image.alt
+      -}}
+    {%- else -%}
+      {% render 'fallback-image',
+        name: section.settings.fallback_image,
+        alt: section.settings.image_alt,
+        sizes: '100vw',
+        style: image_style
+      %}
+    {%- endif -%}
+    {%- if section.settings.link != blank -%}</a>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image banner",
+  "tag": "div",
+  "class": "section-image-banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "fallback_image",
+      "label": "Built-in image",
+      "info": "Used when no image is picked above.",
+      "options": [
+        { "value": "still", "label": "Still life" },
+        { "value": "sky", "label": "Sky" },
+        { "value": "bench", "label": "Bench" }
+      ],
+      "default": "still"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Built-in image alt text",
+      "default": "Abide cap still life"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "info": "Off matches the design: inset by the page gutter.",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,126 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Abide",
+    "theme_version": "1.0.0",
+    "theme_author": "abide.clo",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_cream",
+        "label": "Background (cream)",
+        "default": "#EAE6DA"
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Text & buttons (ink)",
+        "default": "#221F1A"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent (hover, eyebrows)",
+        "default": "#B3122A"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_red",
+        "label": "Red swatch",
+        "info": "Used for the \"Red\" color option on product pages.",
+        "default": "#C8102E"
+      },
+      {
+        "type": "color",
+        "id": "color_image_bg",
+        "label": "Image placeholder",
+        "default": "#DDD8CA"
+      },
+      {
+        "type": "color",
+        "id": "color_panel",
+        "label": "Panel (cart summary)",
+        "default": "#E1DCCE"
+      }
+    ]
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "text",
+        "id": "wordmark_name",
+        "label": "Wordmark",
+        "default": "abide"
+      },
+      {
+        "type": "text",
+        "id": "wordmark_suffix",
+        "label": "Wordmark suffix",
+        "default": ".clo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Header logo image",
+        "info": "Optional. Replaces the live-type wordmark in the header."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo image width",
+        "min": 60,
+        "max": 240,
+        "step": 4,
+        "unit": "px",
+        "default": 120
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Defaults to the abide.clo circle logo."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Social share image",
+        "info": "Defaults to the abide.clo circle logo."
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "text",
+        "id": "one_size_label",
+        "label": "\"One size\" label",
+        "info": "Added to cart lines for products without a Size option, e.g. \"Red · One size\". Leave blank to hide.",
+        "default": "One size"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/abide.clo"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "info": "https://tiktok.com/@abide.clo"
+      }
+    ]
+  }
+]

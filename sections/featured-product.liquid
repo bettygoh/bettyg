@@ -1,0 +1,131 @@
+{%- liquid
+  assign product = section.settings.product
+  assign heading = section.settings.heading
+  if heading == blank and product != blank
+    assign heading = product.title
+  endif
+  assign link = product.url | default: routes.all_products_collection_url
+-%}
+
+<section class="featured-product" aria-labelledby="FeaturedTitle-{{ section.id }}">
+  <a href="{{ link }}" class="featured-product__media" tabindex="-1" aria-hidden="true">
+    {%- if section.settings.image != blank -%}
+      {{-
+        section.settings.image
+        | image_url: width: 1800
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 800px) 50vw, 100vw',
+          widths: '500, 800, 1100, 1400, 1800',
+          alt: section.settings.image.alt
+      -}}
+    {%- elsif product != blank and product.featured_media -%}
+      {{-
+        product.featured_media
+        | image_url: width: 1800
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 800px) 50vw, 100vw',
+          widths: '500, 800, 1100, 1400, 1800',
+          alt: product.featured_media.alt
+      -}}
+    {%- else -%}
+      {% render 'fallback-image', name: 'bench', alt: 'Abide Cap in red', sizes: '(min-width: 800px) 50vw, 100vw' %}
+    {%- endif -%}
+  </a>
+
+  <div class="featured-product__info">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="eyebrow eyebrow--accent">{{ section.settings.eyebrow | escape }}</div>
+    {%- endif -%}
+
+    <h2 class="section-title" id="FeaturedTitle-{{ section.id }}">
+      <a href="{{ link }}">{{ heading | escape }}</a>
+    </h2>
+
+    {%- if section.settings.text != blank -%}
+      <div class="body-large">{{ section.settings.text }}</div>
+    {%- endif -%}
+
+    {%- if product != blank -%}
+      {%- assign variant = product.selected_or_first_available_variant -%}
+      <div class="featured-product__buy">
+        <span class="price">{{ variant.price | money }}</span>
+        {%- form 'product', product, data-product-form: '', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button
+            type="submit"
+            class="button button--primary"
+            {% unless variant.available %}disabled data-sold-out{% endunless %}
+          >
+            {%- if variant.available -%}
+              {{ section.settings.button_label | default: 'Add to bag' | escape }}
+            {%- else -%}
+              {{ 'products.sold_out' | t }}
+            {%- endif -%}
+          </button>
+        {%- endform -%}
+      </div>
+      <p class="form-message form-message--error" data-product-error role="alert" hidden></p>
+    {%- else -%}
+      <div class="featured-product__buy">
+        <span class="price">{{ 2880 | money }}</span>
+        <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+          {{- section.settings.button_label | default: 'Add to bag' | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "tag": "div",
+  "class": "section-featured-product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Featured"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Defaults to the product title.",
+      "default": "The Abide Cap"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Washed red cotton twill, embroidered in white. <em>abide</em> on the front, John 15:4 on the side.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Add to bag"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Defaults to the product's first image."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product"
+    }
+  ]
+}
+{% endschema %}

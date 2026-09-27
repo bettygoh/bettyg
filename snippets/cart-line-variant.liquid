@@ -1,0 +1,35 @@
+{%- comment -%}
+  Variant line for a cart item, e.g. "Red · One size".
+  Appends the theme's "one size" label when the product has no Size option.
+  Accepts:
+  - item: cart line item
+{%- endcomment -%}
+{%- liquid
+  assign parts = ''
+  assign has_size = false
+  unless item.product.has_only_default_variant
+    for option in item.options_with_values
+      assign option_name = option.name | downcase
+      if option_name == 'size'
+        assign has_size = true
+      endif
+      assign parts = parts | append: option.value | append: '|||'
+    endfor
+  endunless
+  if has_size == false and settings.one_size_label != blank
+    assign parts = parts | append: settings.one_size_label | append: '|||'
+  endif
+  for property in item.properties
+    assign first_char = property.first | slice: 0
+    if property.last != blank and first_char != '_'
+      assign parts = parts | append: property.first | append: ': ' | append: property.last | append: '|||'
+    endif
+  endfor
+  assign parts = parts | split: '|||'
+-%}
+{%- if parts.size > 0 -%}
+  <span class="line-item__variant">{{ parts | join: ' · ' | escape }}</span>
+{%- endif -%}
+{%- if item.selling_plan_allocation -%}
+  <span class="line-item__variant">{{ item.selling_plan_allocation.selling_plan.name | escape }}</span>
+{%- endif -%}

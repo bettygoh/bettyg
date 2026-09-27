@@ -1,0 +1,16 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "menu": "",
+        "shop_link": "/collections/all",
+        "contact_link": "/pages/contact",
+        "copyright": "abide.clo"
+      }
+    }
+  },
+  "order": ["footer"]
+}

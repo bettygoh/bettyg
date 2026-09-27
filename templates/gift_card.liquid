@@ -1,0 +1,41 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ 'gift_card.title' | t: shop: shop.name }}</title>
+    {% render 'fonts' %}
+    {% render 'css-variables' %}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {{ content_for_header }}
+  </head>
+  <body>
+    <main class="centered">
+      <img src="{{ 'logo-circle.png' | asset_url }}" alt="{{ shop.name | escape }}" width="120" height="120">
+      <h1 class="content-title">{{ gift_card.initial_value | money }}</h1>
+      {%- if gift_card.enabled == false or gift_card.expired -%}
+        <p class="label">{{ 'gift_card.expired' | t }}</p>
+      {%- elsif gift_card.balance != gift_card.initial_value -%}
+        {%- assign balance = gift_card.balance | money -%}
+        <p class="label">{{ 'gift_card.remaining' | t: balance: balance }}</p>
+      {%- endif -%}
+      <p class="mono" style="font-size: 20px; letter-spacing: .12em;" id="GiftCardCode">{{ gift_card.code | format_code }}</p>
+      <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}"></div>
+      <div class="button-row" style="justify-content: center;">
+        <a href="{{ shop.url }}" class="button button--primary">{{ 'gift_card.shop' | t }}</a>
+        <button type="button" class="button button--secondary" onclick="window.print()">{{ 'gift_card.print' | t }}</button>
+      </div>
+      {%- if gift_card.pass_url -%}
+        <a href="{{ gift_card.pass_url }}"><img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_card.apple_wallet' | t }}" loading="lazy"></a>
+      {%- endif -%}
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('QrCode');
+        if (window.QRCode && el) new QRCode(el, { text: el.dataset.identifier, width: 120, height: 120 });
+      });
+    </script>
+  </body>
+</html>

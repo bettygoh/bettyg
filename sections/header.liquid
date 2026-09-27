@@ -1,0 +1,92 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign featured = section.settings.product
+  assign shop_label = 'sections.header.shop' | t
+-%}
+
+<header class="site-header" {{ section.shopify_attributes }}>
+  <div class="site-header__inner">
+    <button
+      type="button"
+      class="text-button site-header__menu-toggle"
+      aria-expanded="false"
+      aria-controls="MobileNav"
+      data-menu-toggle
+    >
+      {{- 'sections.header.menu' | t -}}
+    </button>
+
+    <nav class="site-nav" aria-label="{{ 'sections.header.primary_nav' | t }}">
+      {%- if menu != blank and menu.links.size > 0 -%}
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}"{% if request.path == routes.all_products_collection_url %} aria-current="page"{% endif %}>{{ shop_label }}</a>
+        {%- if featured != blank -%}
+          <a href="{{ featured.url }}"{% if product.id == featured.id %} aria-current="page"{% endif %}>{{ featured.title | escape }}</a>
+        {%- endif -%}
+      {%- endif -%}
+    </nav>
+
+    <a href="{{ routes.root_url }}" class="wordmark-link" aria-label="{{ shop.name | escape }}">
+      {%- if settings.logo != blank -%}
+        <span class="wordmark">
+          {{- settings.logo | image_url: width: 400 | image_tag: width: settings.logo_width, alt: shop.name, loading: 'eager' -}}
+        </span>
+      {%- else -%}
+        {% render 'wordmark' %}
+      {%- endif -%}
+    </a>
+
+    <div class="site-header__actions">
+      <a
+        href="{{ routes.cart_url }}"
+        class="text-button"
+        data-cart-open
+        aria-controls="CartDrawer"
+        aria-expanded="false"
+        aria-haspopup="dialog"
+      >
+        {{- 'sections.header.bag' | t }} (<span data-cart-count>{{ cart.item_count }}</span>)
+      </a>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" id="MobileNav" aria-label="{{ 'sections.header.primary_nav' | t }}">
+    {%- if menu != blank and menu.links.size > 0 -%}
+      {%- for link in menu.links -%}
+        <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <a href="{{ routes.all_products_collection_url }}">{{ shop_label }}</a>
+      {%- if featured != blank -%}
+        <a href="{{ featured.url }}">{{ featured.title | escape }}</a>
+      {%- endif -%}
+    {%- endif -%}
+  </nav>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Leave empty to show \"Shop\" plus the featured product below."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Featured product link",
+      "info": "Used when no menu is selected."
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}
